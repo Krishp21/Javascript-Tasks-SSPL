@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Maker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        width: 600px;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+      }
+      .color-box {
+        width: 250px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+      input {
+        width: 150px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Create Color Maker</h2>
+    <div class="container">
+      <div class="controls">
+        <label>R <input type="range" id="r" min="0" max="255" value="0" /></label>
+        <label>G <input type="range" id="g" min="0" max="255" value="0" /></label>
+        <label>B <input type="range" id="b" min="0" max="255" value="0" /></label>
+        <p id="rgbValue">rgb(0, 0, 0)</p>
+      </div>
+      <div class="color-box" id="colorBox">rgb(0, 0, 0)</div>
+    </div>
+    <script>
+      function updateColor() {
+        let r = document.getElementById("r").value;
+        let g = document.getElementById("g").value;
+        let b = document.getElementById("b").value;
+        let rgbString = `rgb(${r}, ${g}, ${b})`;
+        document.getElementById("colorBox").style.backgroundColor = rgbString;
+        document.getElementById("colorBox").textContent = rgbString;
+        document.getElementById("rgbValue").textContent = rgbString;
+      }
+      
+      document.getElementById("r").addEventListener("input", updateColor);
+      document.getElementById("g").addEventListener("input", updateColor);
+      document.getElementById("b").addEventListener("input", updateColor);
+    </script>
+  </body>
+</html>

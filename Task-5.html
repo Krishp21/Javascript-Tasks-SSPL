@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background Color</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            transition: background 0.5s ease-in-out;
+        }
+        #colorCode {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <p id="colorCode">Color: </p>
+
+    <script>
+        function generateRandomColor() {
+            return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0").toUpperCase();
+        }
+
+        function changeColor() {
+            let color = generateRandomColor();
+            document.body.style.backgroundColor = color;
+            document.getElementById("colorCode").textContent = `Color: ${color}`;
+        }
+
+        window.onload = changeColor; 
+    </script>
+
+</body>
+</html>

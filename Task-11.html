@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GST Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+      input,
+      button {
+        margin: 10px;
+        padding: 10px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>GST Calculator</h2>
+    <input type="number" id="amount" placeholder="Enter amount" />
+    <div>
+      <label>select GST rate:</label>
+      <select id="gst">
+        <option value="5">5%</option>
+        <option value="12">12%</option>
+        <option value="18">18%</option>
+        <option value="28">28%</option>
+      </select>
+    </div>
+    <button id="calculate">Calculate GST</button>
+    <p id="Amount">Amount:</p>
+    <p id="GST">GST:</p>
+    <p id="result">Total Amount:</p>
+
+    <script>
+      document
+        .getElementById("calculate")
+        .addEventListener("click", function () {
+          let amount = parseFloat(document.getElementById("amount").value);
+          let gst = parseFloat(document.getElementById("gst").value);
+          if (isNaN(amount) || isNaN(gst)) {
+            document.getElementById("result").textContent =
+              "Enter valid values!";
+            return;
+          }
+          let total = amount + (amount * gst) / 100;
+          document.getElementById(
+            "Amount"
+          ).textContent = `Amount: ${amount} Rs`;
+          document.getElementById("GST").textContent = `GST: ${gst} %`;
+          document.getElementById(
+            "result"
+          ).textContent = `Total Amount: ${total.toFixed(2)} Rs`;
+        });
+    </script>
+  </body>
+</html>

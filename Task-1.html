@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #eef2f3;
+        }
+        h2 {
+            color: #333;
+        }
+        #counter {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px;
+            color: #007bff;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #increment {
+            background-color: #28a745;
+            color: white;
+        }
+        #increment:hover {
+            background-color: #218838;
+        }
+        #decrement {
+            background-color: #dc3545;
+            color: white;
+        }
+        #decrement:hover {
+            background-color: #c82333;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Counter Application</h2>
+    <p id="counter">0</p>
+    <button id="decrement" disabled>Decrement</button>
+    <button id="increment">Increment</button>
+
+    <script>
+        function counterApp() {
+            let count = 0;
+            const display = document.getElementById("counter");
+            const incrementBtn = document.getElementById("increment");
+            const decrementBtn = document.getElementById("decrement");
+
+            function updateDisplay() {
+                display.textContent = count;
+                incrementBtn.disabled = count === 10;
+                decrementBtn.disabled = count === 0;
+            }
+
+            incrementBtn.addEventListener("click", () => {
+                if (count < 10) {
+                    count++;
+                    updateDisplay();
+                }
+            });
+
+            decrementBtn.addEventListener("click", () => {
+                if (count > 0) {
+                    count--;
+                    updateDisplay();
+                }
+            });
+
+            updateDisplay(); 
+        }
+
+        counterApp();
+    </script>
+
+</body>
+</html>

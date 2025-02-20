@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Based Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #timer {
+            font-size: 2rem;
+            margin: 10px;
+        }
+        #otp {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>OTP Based Timer</h2>
+    <p id="otp">OTP: -</p>
+    <p id="timer">00:30</p>
+    <button id="start">Start Timer</button>
+    <button id="resend" style="display: none;">Resend OTP</button>
+
+    <script>
+        let timeLeft = 30;
+        let interval;
+
+        function generateOTP() {
+            return Math.floor(1000 + Math.random() * 9000); 
+        }
+
+        function startCountdown() {
+            clearInterval(interval); 
+            document.getElementById("resend").style.display = "none";
+            document.getElementById("start").style.display = "none";
+
+            timeLeft = 30;
+            document.getElementById("timer").textContent = "00:30";
+            document.getElementById("otp").textContent = `OTP: ${generateOTP()}`;
+
+            interval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById("timer").textContent = `00:${timeLeft < 10 ? "0" : ""}${timeLeft}`;
+                } else {
+                    clearInterval(interval);
+                    document.getElementById("resend").style.display = "block";
+                }
+            }, 1000);
+        }
+
+        document.getElementById("start").addEventListener("click", startCountdown);
+        document.getElementById("resend").addEventListener("click", startCountdown);
+    </script>
+
+</body>
+</html>

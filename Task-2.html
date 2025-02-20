@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #eef2f3;
+        }
+        h2 {
+            color: #333;
+        }
+        #timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px;
+            color: #007bff;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #start {
+            background-color: #28a745;
+            color: white;
+        }
+        #start:hover {
+            background-color: #218838;
+        }
+        #pause {
+            background-color: #ffc107;
+            color: black;
+        }
+        #pause:hover {
+            background-color: #e0a800;
+        }
+        #stop {
+            background-color: #dc3545;
+            color: white;
+        }
+        #stop:hover {
+            background-color: #c82333;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Countdown Timer</h2>
+    <p id="timer">0</p>
+    <button id="start">Start</button>
+    <button id="pause" disabled>Pause</button>
+    <button id="stop" disabled>Stop</button>
+
+    <script>
+        let count = 0;
+        let interval;
+        const timerDisplay = document.getElementById("timer");
+        const startBtn = document.getElementById("start");
+        const pauseBtn = document.getElementById("pause");
+        const stopBtn = document.getElementById("stop");
+
+        function updateDisplay() {
+            timerDisplay.textContent = count;
+            startBtn.disabled = count === 10;
+            pauseBtn.disabled = interval === null;
+            stopBtn.disabled = interval === null && count === 0;
+        }
+
+        function startTimer() {
+            if (!interval && count < 10) {
+                interval = setInterval(() => {
+                    if (count < 10) {
+                        count++;
+                        updateDisplay();
+                    } 
+                    if (count === 10) {
+                        clearInterval(interval);
+                        interval = null;
+                        updateDisplay();
+                    }
+                }, 1000);
+                updateDisplay();
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(interval);
+            interval = null;
+            updateDisplay();
+        }
+
+        function stopTimer() {
+            clearInterval(interval);
+            interval = null;
+            count = 0;
+            updateDisplay();
+        }
+
+        startBtn.addEventListener("click", startTimer);
+        pauseBtn.addEventListener("click", pauseTimer);
+        stopBtn.addEventListener("click", stopTimer);
+
+        updateDisplay(); 
+    </script>
+
+</body>
+</html>

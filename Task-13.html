@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .checkbox-group, .radio-group {
+            display: flex;
+            gap: 10px;
+            margin: 5px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>User Form</h2>
+        
+        <label>Enter Name:</label>
+        <input type="text" id="name">
+        <span class="error" id="nameError"></span>
+
+        <label>Enter Mobile No:</label>
+        <input type="text" id="mobile">
+        <span class="error" id="mobileError"></span>
+
+        <label>Gender:</label>
+        <div class="radio-group">
+            <input type="radio" name="gender" value="Male"> Male
+            <input type="radio" name="gender" value="Female"> Female
+        </div>
+        <span class="error" id="genderError"></span>
+
+        <label>Hobby:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" name="hobby" value="Reading"> Reading
+            <input type="checkbox" name="hobby" value="Dancing"> Dancing
+            <input type="checkbox" name="hobby" value="Singing"> Singing
+        </div>
+
+        <label>City:</label>
+        <select id="city">
+            <option value="">---Select City---</option>
+            <option value="New York">New York</option>
+            <option value="Los Angeles">Los Angeles</option>
+            <option value="Chicago">Chicago</option>
+            <option value="Houston">Houston</option>
+        </select>
+        <span class="error" id="cityError"></span>
+
+        <button onclick="validateForm()">Submit Data</button>
+
+        <div class="output" id="output">
+            <h3>Submitted Data:</h3>
+            <p><strong>Name:</strong> <span id="displayName"></span></p>
+            <p><strong>Mobile No:</strong> <span id="displayMobile"></span></p>
+            <p><strong>Gender:</strong> <span id="displayGender"></span></p>
+            <p><strong>Hobbies:</strong> <span id="displayHobby"></span></p>
+            <p><strong>City:</strong> <span id="displayCity"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            let name = document.getElementById("name").value.trim();
+            let mobile = document.getElementById("mobile").value.trim();
+            let gender = document.querySelector('input[name="gender"]:checked');
+            let hobbies = document.querySelectorAll('input[name="hobby"]:checked');
+            let city = document.getElementById("city").value;
+
+            // Error messages
+            let isValid = true;
+            document.getElementById("nameError").innerText = name ? "" : "Name is required.";
+            document.getElementById("mobileError").innerText = /^[0-9]{10}$/.test(mobile) ? "" : "Enter a valid 10-digit mobile number.";
+            document.getElementById("genderError").innerText = gender ? "" : "Select a gender.";
+            document.getElementById("cityError").innerText = city ? "" : "Select a city.";
+
+            if (!name || !mobile || !gender || !city) {
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Display Data
+                document.getElementById("displayName").innerText = name;
+                document.getElementById("displayMobile").innerText = mobile;
+                document.getElementById("displayGender").innerText = gender.value;
+                document.getElementById("displayHobby").innerText = hobbies.length > 0 ? 
+                    Array.from(hobbies).map(hobby => hobby.value).join(", ") : "None";
+                document.getElementById("displayCity").innerText = city;
+
+                document.getElementById("output").style.display = "block";
+            } else {
+                document.getElementById("output").style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #e1924d;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #dc7f42;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            min-height: 40px;
+            cursor: grab;
+        }
+
+        li:hover {
+            background: #e0e0e0;
+        }
+
+        .task-text {
+            flex-grow: 1;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .edit, .delete {
+            border: none;
+            padding: 6px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .edit {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .edit:hover {
+            background-color: #e0a800;
+        }
+
+        .delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>To-Do List</h2>
+        <div class="input-container">
+            <input type="text" id="taskInput" placeholder="Enter a task..." />
+            <button onclick="addTask()" id="addButton">Add</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        let editIndex = null;
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        function renderTasks() {
+            let taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+
+            tasks.forEach((task, index) => {
+                let li = document.createElement("li");
+                li.draggable = true;
+                li.addEventListener("dragstart", (e) => {
+                    e.dataTransfer.setData("text/plain", index);
+                });
+
+                li.innerHTML = `
+                    <input type="checkbox" class="checkbox" onclick="toggleDone(${index})" ${task.done ? "checked" : ""}>
+                    <span class="task-text ${task.done ? "completed" : ""}">${task.text}</span> 
+                    <button class="edit" onclick="editTask(${index})">Edit</button>
+                    <button class="delete" onclick="deleteTask(${index})">Delete</button>
+                `;
+
+                li.addEventListener("dragover", (e) => e.preventDefault());
+                li.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    let draggedIndex = e.dataTransfer.getData("text/plain");
+                    swapTasks(draggedIndex, index);
+                });
+
+                taskList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            let taskInput = document.getElementById("taskInput");
+            let addButton = document.getElementById("addButton");
+
+            let newTask = taskInput.value.trim();
+            if (newTask === "") return;
+
+            if (editIndex !== null) {
+                tasks[editIndex].text = newTask;
+                editIndex = null;
+                addButton.textContent = "Add";
+            } else {
+                tasks.push({ text: newTask, done: false });
+            }
+
+            taskInput.value = "";
+            taskInput.focus();
+            saveTasks();
+        }
+
+        function editTask(index) {
+            let taskInput = document.getElementById("taskInput");
+            let addButton = document.getElementById("addButton");
+
+            taskInput.value = tasks[index].text;
+            editIndex = index;
+            addButton.textContent = "Update";
+            taskInput.focus();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+        }
+
+        function toggleDone(index) {
+            tasks[index].done = !tasks[index].done;
+            saveTasks();
+        }
+
+        function swapTasks(fromIndex, toIndex) {
+            let temp = tasks[fromIndex];
+            tasks[fromIndex] = tasks[toIndex];
+            tasks[toIndex] = temp;
+            saveTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        document.addEventListener("DOMContentLoaded", renderTasks);
+    </script>
+
+</body>
+</html>

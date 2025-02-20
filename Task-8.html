@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+        #result {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Guess the Number</h2>
+    <p>Enter a number between 1 and 10:</p>
+    <input type="number" id="guess" min="1" max="10">
+    <button id="submit">Check</button>
+    <button id="reset" style="display: none;">Play Again</button>
+    <p id="result"></p>
+
+    <script>
+        let randomNumber;
+
+        function generateRandomNumber() {
+            randomNumber = Math.floor(Math.random() * 10) + 1;
+        }
+
+        function checkGuess() {
+            let guess = parseInt(document.getElementById("guess").value);
+            let result = document.getElementById("result");
+
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                result.textContent = "Please enter a valid number between 1 and 10.";
+                result.style.color = "orange";
+                return;
+            }
+
+            if (guess === randomNumber) {
+                result.textContent = "🎉 Success! You guessed the right number.";
+                result.style.color = "green";
+                document.getElementById("submit").style.display = "none";
+                document.getElementById("reset").style.display = "block";
+            } else {
+                result.textContent = guess > randomNumber 
+                    ? "Too high... Try again." 
+                    : "Too low... Try again.";
+                result.style.color = "red";
+            }
+        }
+
+        document.getElementById("submit").addEventListener("click", checkGuess);
+        document.getElementById("reset").addEventListener("click", function () {
+            generateRandomNumber();
+            document.getElementById("result").textContent = "";
+            document.getElementById("guess").value = "";
+            document.getElementById("submit").style.display = "inline-block";
+            document.getElementById("reset").style.display = "none";
+        });
+
+        generateRandomNumber();
+    </script>
+
+</body>
+</html>
