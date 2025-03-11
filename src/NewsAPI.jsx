@@ -29,7 +29,7 @@ const NewsAPI = () => {
   return (
     <div className="news-container">
       <div className="header">
-        <Link to="/" className="back-button">🔙 Back to Home</Link>
+        <Link to="/" className="back-button"> Back to Home</Link>
         <h1>Trending News Today</h1>
       </div>
 
@@ -49,7 +49,7 @@ const NewsAPI = () => {
                 />
                 <h2 className="news-title">{article.title}</h2>
                 <p className="news-date">
-                  📅 {new Date(article.publishedAt).toLocaleDateString()}
+                   {new Date(article.publishedAt).toLocaleDateString()}
                 </p>
               </a>
             </div>

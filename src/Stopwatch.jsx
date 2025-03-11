@@ -11,22 +11,23 @@ class Stopwatch extends Component {
     this.timer = null;
   }
 
-  handleStartStop = () => {
-    this.setState((prevState) => {
-      if (prevState.isRunning) {
-        clearInterval(this.timer);
-      } else {
-        this.timer = setInterval(() => {
-          this.setState((prev) => ({ time: prev.time + 1 }));
-        }, 1000);
-      }
-      return { isRunning: !prevState.isRunning };
-    });
+  handleStart = () => {
+    if (!this.state.isRunning) {
+      this.setState({ isRunning: true });
+      this.timer = setInterval(() => {
+        this.setState((prevState) => ({ time: prevState.time + 1 }));
+      }, 1000);
+    }
+  };
+
+  handleStop = () => {
+    this.setState({ isRunning: false });
+    clearInterval(this.timer);
   };
 
   handleReset = () => {
-    clearInterval(this.timer);
     this.setState({ time: 0, isRunning: false });
+    clearInterval(this.timer);
   };
 
   componentWillUnmount() {
@@ -36,7 +37,7 @@ class Stopwatch extends Component {
   formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   render() {
@@ -46,7 +47,7 @@ class Stopwatch extends Component {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#dee0e3",
+        backgroundColor: "rgb(222 224 227)",
         borderRadius: "10px",
         padding: "20px",
         marginTop: "100px",
@@ -59,7 +60,7 @@ class Stopwatch extends Component {
         marginBottom: "10px",
       },
       timeDisplay: {
-        fontSize: "28px",
+        fontSize: "36px",
         fontWeight: "bold",
         margin: "10px 0",
       },
@@ -74,40 +75,26 @@ class Stopwatch extends Component {
         border: "none",
         cursor: "pointer",
         borderRadius: "30px",
-        transition: "background 0.3s ease",
       },
       startButton: { backgroundColor: "green" },
-      stopButton: {
-        backgroundColor: "red",
-        opacity: this.state.isRunning ? "1" : "0.6",
-        cursor: this.state.isRunning ? "pointer" : "not-allowed",
-      },
+      stopButton: { backgroundColor: "red" },
       resetButton: { backgroundColor: "gray" },
-      backButton: {
-        marginTop: "20px",
-        padding: "10px 20px",
-        fontSize: "1.2rem",
-        backgroundColor: "#4caf50",
-        color: "white",
-        textDecoration: "none",
-        borderRadius: "25px",
-        display: "inline-block",
-      },
     };
 
     return (
       <div style={styles.container}>
-        <h1 style={styles.title}>⏱ Stopwatch</h1>
+        <h1 style={styles.title}>Stopwatch</h1>
         <p style={styles.timeDisplay}>{this.formatTime(this.state.time)}</p>
         <div style={styles.buttonGroup}>
           <button
-            onClick={this.handleStartStop}
+            onClick={this.handleStart}
             style={{ ...styles.button, ...styles.startButton }}
+            disabled={this.state.isRunning}
           >
-            {this.state.isRunning ? "Pause" : this.state.time > 0 ? "Resume" : "Start"}
+            Start
           </button>
           <button
-            onClick={this.handleStartStop}
+            onClick={this.handleStop}
             style={{ ...styles.button, ...styles.stopButton }}
             disabled={!this.state.isRunning}
           >
@@ -116,11 +103,26 @@ class Stopwatch extends Component {
           <button
             onClick={this.handleReset}
             style={{ ...styles.button, ...styles.resetButton }}
+            disabled={this.state.time === 0}
           >
             Reset
           </button>
         </div>
-        <Link to="/" style={styles.backButton}>🔙 Back to Home</Link>
+        <Link
+          to="/"
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            fontSize: "1.2rem",
+            backgroundColor: "#4caf50",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "25px",
+            display: "inline-block",
+          }}
+        >
+          Back to Home
+        </Link>
       </div>
     );
   }
